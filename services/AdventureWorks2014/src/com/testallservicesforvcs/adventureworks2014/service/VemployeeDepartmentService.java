@@ -22,6 +22,16 @@ import com.testallservicesforvcs.adventureworks2014.VemployeeDepartmentId;
  */
 public interface VemployeeDepartmentService {
 
+    /**
+     * Creates a new VemployeeDepartment. It does cascade insert for all the children in a single transaction.
+     *
+     * This method overrides the input field values using Server side or database managed properties defined on VemployeeDepartment if any.
+     *
+     * @param vemployeeDepartment Details of the VemployeeDepartment to be created; value cannot be null.
+     * @return The newly created VemployeeDepartment.
+     */
+	VemployeeDepartment create(VemployeeDepartment vemployeeDepartment);
+
 
 	/**
 	 * Returns VemployeeDepartment by given id if exists.
@@ -40,6 +50,26 @@ public interface VemployeeDepartmentService {
 	 */
 	VemployeeDepartment findById(VemployeeDepartmentId vemployeedepartmentId);
 
+
+	/**
+	 * Updates the details of an existing VemployeeDepartment. It replaces all fields of the existing VemployeeDepartment with the given vemployeeDepartment.
+	 *
+     * This method overrides the input field values using Server side or database managed properties defined on VemployeeDepartment if any.
+     *
+	 * @param vemployeeDepartment The details of the VemployeeDepartment to be updated; value cannot be null.
+	 * @return The updated VemployeeDepartment.
+	 * @throws EntityNotFoundException if no VemployeeDepartment is found with given input.
+	 */
+	VemployeeDepartment update(VemployeeDepartment vemployeeDepartment) throws EntityNotFoundException;
+
+    /**
+	 * Deletes an existing VemployeeDepartment with the given id.
+	 *
+	 * @param vemployeedepartmentId The id of the VemployeeDepartment to be deleted; value cannot be null.
+	 * @return The deleted VemployeeDepartment.
+	 * @throws EntityNotFoundException if no VemployeeDepartment found with the given id.
+	 */
+	VemployeeDepartment delete(VemployeeDepartmentId vemployeedepartmentId) throws EntityNotFoundException;
 
 	/**
 	 * Find all VemployeeDepartments matching the given QueryFilter(s).

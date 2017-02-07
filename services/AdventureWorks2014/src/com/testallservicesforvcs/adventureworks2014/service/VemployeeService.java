@@ -22,6 +22,16 @@ import com.testallservicesforvcs.adventureworks2014.VemployeeId;
  */
 public interface VemployeeService {
 
+    /**
+     * Creates a new Vemployee. It does cascade insert for all the children in a single transaction.
+     *
+     * This method overrides the input field values using Server side or database managed properties defined on Vemployee if any.
+     *
+     * @param vemployee Details of the Vemployee to be created; value cannot be null.
+     * @return The newly created Vemployee.
+     */
+	Vemployee create(Vemployee vemployee);
+
 
 	/**
 	 * Returns Vemployee by given id if exists.
@@ -40,6 +50,26 @@ public interface VemployeeService {
 	 */
 	Vemployee findById(VemployeeId vemployeeId);
 
+
+	/**
+	 * Updates the details of an existing Vemployee. It replaces all fields of the existing Vemployee with the given vemployee.
+	 *
+     * This method overrides the input field values using Server side or database managed properties defined on Vemployee if any.
+     *
+	 * @param vemployee The details of the Vemployee to be updated; value cannot be null.
+	 * @return The updated Vemployee.
+	 * @throws EntityNotFoundException if no Vemployee is found with given input.
+	 */
+	Vemployee update(Vemployee vemployee) throws EntityNotFoundException;
+
+    /**
+	 * Deletes an existing Vemployee with the given id.
+	 *
+	 * @param vemployeeId The id of the Vemployee to be deleted; value cannot be null.
+	 * @return The deleted Vemployee.
+	 * @throws EntityNotFoundException if no Vemployee found with the given id.
+	 */
+	Vemployee delete(VemployeeId vemployeeId) throws EntityNotFoundException;
 
 	/**
 	 * Find all Vemployees matching the given QueryFilter(s).

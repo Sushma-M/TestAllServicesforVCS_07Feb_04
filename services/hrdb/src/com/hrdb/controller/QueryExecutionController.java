@@ -8,62 +8,47 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.beans.factory.annotation.Qualifier;
-import com.hrdb.service.HrdbQueryExecutorService_V1;
-import com.wavemaker.runtime.data.model.CustomQuery;
-import com.wavemaker.runtime.data.exception.QueryParameterMismatchException;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
+import com.wavemaker.runtime.data.export.ExportType;
+import com.wavemaker.runtime.file.model.Downloadable;
 import com.wavemaker.tools.api.core.annotations.WMAccessVisibility;
 import com.wavemaker.tools.api.core.models.AccessSpecifier;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.hrdb.models.query.EmployeedatabyIdResponse;
+import com.hrdb.service.HrdbQueryExecutorService;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController(value = "Hrdb.QueryExecutionController")
-@Api(value = "QueryExecutionController", description = "Controller class for query execution")
 @RequestMapping("/hrdb/queryExecutor")
+@Api(value = "QueryExecutionController", description = "Controller class for query execution")
 public class QueryExecutionController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryExecutionController.class);
 
     @Autowired
-    private HrdbQueryExecutorService_V1 queryService;
+    private HrdbQueryExecutorService queryService;
 
-    @ApiOperation(value = "Process request to execute queries")
     @RequestMapping(value = "/queries/employeedatabyID", method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public Page<Object> executeEmployeedatabyID(@RequestParam(value = "id", required = false) java.lang.Integer id, Pageable pageable) throws QueryParameterMismatchException {
-        LOGGER.debug("Executing named query employeedatabyID");
-        Page<Object> result = queryService.executeEmployeedatabyID(pageable, id);
-        LOGGER.debug("got the result of named query {}", result);
-        return result;
+    @ApiOperation(value = "Process request to execute queries")
+    public Page<EmployeedatabyIdResponse> executeEmployeedatabyID(@RequestParam(value = "id", required = false) Integer id, Pageable pageable) {
+        LOGGER.debug("Executing named query: employeedatabyID");
+        Page<EmployeedatabyIdResponse> _result = queryService.executeEmployeedatabyID(id, pageable);
+        LOGGER.debug("got the result for named query: employeedatabyID, result:{}", _result);
+        return _result;
     }
 
-    @ApiOperation(value = "Process request to execute customer queries")
-    @RequestMapping(value = "/queries/wm_custom", method = RequestMethod.POST)
+    @ApiOperation(value = "Returns downloadable file for query employeedatabyID")
+    @RequestMapping(value = "/queries/employeedatabyID/export/{exportType}", method = RequestMethod.GET, produces = "application/octet-stream")
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public Page<Object> executeWMCustomQuery(@RequestBody CustomQuery query, Pageable pageable) {
-        Page<Object> result = queryService.executeWMCustomQuerySelect(query, pageable);
-        LOGGER.debug("got the result {}" + result);
-        return result;
-    }
-
-    @ApiOperation(value = "Process request to execute customer queries")
-    @RequestMapping(value = "/queries/wm_custom_update", method = RequestMethod.POST)
-    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public int executeWMCustomQuery(@RequestBody CustomQuery query) {
-        int result = queryService.executeWMCustomQueryUpdate(query);
-        LOGGER.debug("got the result {}" + result);
-        return result;
+    public Downloadable exportEmployeedatabyID(@PathVariable("exportType") ExportType exportType, @RequestParam(value = "id", required = true) Integer id, Pageable pageable) {
+        LOGGER.debug("Exporting named query: employeedatabyID");
+        return queryService.exportEmployeedatabyID(exportType, id, pageable);
     }
 }

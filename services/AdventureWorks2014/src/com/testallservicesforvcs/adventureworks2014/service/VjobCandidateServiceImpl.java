@@ -44,6 +44,14 @@ public class VjobCandidateServiceImpl implements VjobCandidateService {
         this.wmGenericDao = wmGenericDao;
     }
 
+    @Transactional(value = "AdventureWorks2014TransactionManager")
+    @Override
+	public VjobCandidate create(VjobCandidate vjobCandidate) {
+        LOGGER.debug("Creating a new VjobCandidate with information: {}", vjobCandidate);
+        VjobCandidate vjobCandidateCreated = this.wmGenericDao.create(vjobCandidate);
+        return vjobCandidateCreated;
+    }
+
 	@Transactional(readOnly = true, value = "AdventureWorks2014TransactionManager")
 	@Override
 	public VjobCandidate getById(VjobCandidateId vjobcandidateId) throws EntityNotFoundException {
@@ -63,6 +71,46 @@ public class VjobCandidateServiceImpl implements VjobCandidateService {
         return this.wmGenericDao.findById(vjobcandidateId);
     }
 
+
+	@Transactional(rollbackFor = EntityNotFoundException.class, value = "AdventureWorks2014TransactionManager")
+	@Override
+	public VjobCandidate update(VjobCandidate vjobCandidate) throws EntityNotFoundException {
+        LOGGER.debug("Updating VjobCandidate with information: {}", vjobCandidate);
+        this.wmGenericDao.update(vjobCandidate);
+
+        VjobCandidateId vjobcandidateId = new VjobCandidateId();
+        vjobcandidateId.setJobCandidateId(vjobCandidate.getJobCandidateId());
+        vjobcandidateId.setBusinessEntityId(vjobCandidate.getBusinessEntityId());
+        vjobcandidateId.setName_prefix(vjobCandidate.getName_prefix());
+        vjobcandidateId.setName_first(vjobCandidate.getName_first());
+        vjobcandidateId.setName_middle(vjobCandidate.getName_middle());
+        vjobcandidateId.setName_last(vjobCandidate.getName_last());
+        vjobcandidateId.setName_suffix(vjobCandidate.getName_suffix());
+        vjobcandidateId.setSkills(vjobCandidate.getSkills());
+        vjobcandidateId.setAddr_type(vjobCandidate.getAddr_type());
+        vjobcandidateId.setAddr_loc_countryRegion(vjobCandidate.getAddr_loc_countryRegion());
+        vjobcandidateId.setAddr_loc_state(vjobCandidate.getAddr_loc_state());
+        vjobcandidateId.setAddr_loc_city(vjobCandidate.getAddr_loc_city());
+        vjobcandidateId.setAddr_postalCode(vjobCandidate.getAddr_postalCode());
+        vjobcandidateId.setEmail(vjobCandidate.getEmail());
+        vjobcandidateId.setWebSite(vjobCandidate.getWebSite());
+        vjobcandidateId.setModifiedDate(vjobCandidate.getModifiedDate());
+
+        return this.wmGenericDao.findById(vjobcandidateId);
+    }
+
+    @Transactional(value = "AdventureWorks2014TransactionManager")
+	@Override
+	public VjobCandidate delete(VjobCandidateId vjobcandidateId) throws EntityNotFoundException {
+        LOGGER.debug("Deleting VjobCandidate with id: {}", vjobcandidateId);
+        VjobCandidate deleted = this.wmGenericDao.findById(vjobcandidateId);
+        if (deleted == null) {
+            LOGGER.debug("No VjobCandidate found with id: {}", vjobcandidateId);
+            throw new EntityNotFoundException(String.valueOf(vjobcandidateId));
+        }
+        this.wmGenericDao.delete(deleted);
+        return deleted;
+    }
 
 	@Transactional(readOnly = true, value = "AdventureWorks2014TransactionManager")
 	@Override

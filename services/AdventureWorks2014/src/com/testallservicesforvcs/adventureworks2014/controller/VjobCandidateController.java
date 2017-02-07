@@ -45,10 +45,20 @@ public class VjobCandidateController {
     @Qualifier("AdventureWorks2014.VjobCandidateService")
     private VjobCandidateService vjobCandidateService;
 
+    @ApiOperation(value = "Creates a new VjobCandidate instance.")
+    @RequestMapping(method = RequestMethod.POST)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public VjobCandidate createVjobCandidate(@RequestBody VjobCandidate vjobCandidate) {
+        LOGGER.debug("Create VjobCandidate with information: {}", vjobCandidate);
+        vjobCandidate = vjobCandidateService.create(vjobCandidate);
+        LOGGER.debug("Created VjobCandidate with information: {}", vjobCandidate);
+        return vjobCandidate;
+    }
+
     @ApiOperation(value = "Returns the VjobCandidate instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public VjobCandidate getVjobCandidate(@RequestParam("jobCandidateId") Integer jobCandidateId, @RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("name_prefix") String name_prefix, @RequestParam("name_first") String name_first, @RequestParam("name_middle") String name_middle, @RequestParam("name_last") String name_last, @RequestParam("name_suffix") String name_suffix, @RequestParam("skills") String skills, @RequestParam("addr_type") String addr_type, @RequestParam("addr_loc_countryRegion") String addr_loc_countryRegion, @RequestParam("addr_loc_state") String addr_loc_state, @RequestParam("addr_loc_city") String addr_loc_city, @RequestParam("addr_postalCode") String addr_postalCode, @RequestParam("email") String email, @RequestParam("webSite") String webSite, @RequestParam("modifiedDate") LocalDateTime modifiedDate) throws EntityNotFoundException {
+    public VjobCandidate getVjobCandidate(@RequestParam(value = "jobCandidateId", required = true) Integer jobCandidateId, @RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "name_prefix", required = true) String name_prefix, @RequestParam(value = "name_first", required = true) String name_first, @RequestParam(value = "name_middle", required = true) String name_middle, @RequestParam(value = "name_last", required = true) String name_last, @RequestParam(value = "name_suffix", required = true) String name_suffix, @RequestParam(value = "skills", required = true) String skills, @RequestParam(value = "addr_type", required = true) String addr_type, @RequestParam(value = "addr_loc_countryRegion", required = true) String addr_loc_countryRegion, @RequestParam(value = "addr_loc_state", required = true) String addr_loc_state, @RequestParam(value = "addr_loc_city", required = true) String addr_loc_city, @RequestParam(value = "addr_postalCode", required = true) String addr_postalCode, @RequestParam(value = "email", required = true) String email, @RequestParam(value = "webSite", required = true) String webSite, @RequestParam(value = "modifiedDate", required = true) LocalDateTime modifiedDate) throws EntityNotFoundException {
         VjobCandidateId vjobcandidateId = new VjobCandidateId();
         vjobcandidateId.setJobCandidateId(jobCandidateId);
         vjobcandidateId.setBusinessEntityId(businessEntityId);
@@ -72,6 +82,56 @@ public class VjobCandidateController {
         return vjobCandidate;
     }
 
+    @ApiOperation(value = "Updates the VjobCandidate instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.PUT)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public VjobCandidate editVjobCandidate(@RequestParam("jobCandidateId") Integer jobCandidateId, @RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("name_prefix") String name_prefix, @RequestParam("name_first") String name_first, @RequestParam("name_middle") String name_middle, @RequestParam("name_last") String name_last, @RequestParam("name_suffix") String name_suffix, @RequestParam("skills") String skills, @RequestParam("addr_type") String addr_type, @RequestParam("addr_loc_countryRegion") String addr_loc_countryRegion, @RequestParam("addr_loc_state") String addr_loc_state, @RequestParam("addr_loc_city") String addr_loc_city, @RequestParam("addr_postalCode") String addr_postalCode, @RequestParam("email") String email, @RequestParam("webSite") String webSite, @RequestParam("modifiedDate") LocalDateTime modifiedDate, @RequestBody VjobCandidate vjobCandidate) throws EntityNotFoundException {
+        vjobCandidate.setJobCandidateId(jobCandidateId);
+        vjobCandidate.setBusinessEntityId(businessEntityId);
+        vjobCandidate.setName_prefix(name_prefix);
+        vjobCandidate.setName_first(name_first);
+        vjobCandidate.setName_middle(name_middle);
+        vjobCandidate.setName_last(name_last);
+        vjobCandidate.setName_suffix(name_suffix);
+        vjobCandidate.setSkills(skills);
+        vjobCandidate.setAddr_type(addr_type);
+        vjobCandidate.setAddr_loc_countryRegion(addr_loc_countryRegion);
+        vjobCandidate.setAddr_loc_state(addr_loc_state);
+        vjobCandidate.setAddr_loc_city(addr_loc_city);
+        vjobCandidate.setAddr_postalCode(addr_postalCode);
+        vjobCandidate.setEmail(email);
+        vjobCandidate.setWebSite(webSite);
+        vjobCandidate.setModifiedDate(modifiedDate);
+        LOGGER.debug("VjobCandidate details with id is updated with: {}", vjobCandidate);
+        return vjobCandidateService.update(vjobCandidate);
+    }
+
+    @ApiOperation(value = "Deletes the VjobCandidate instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.DELETE)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public boolean deleteVjobCandidate(@RequestParam("jobCandidateId") Integer jobCandidateId, @RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("name_prefix") String name_prefix, @RequestParam("name_first") String name_first, @RequestParam("name_middle") String name_middle, @RequestParam("name_last") String name_last, @RequestParam("name_suffix") String name_suffix, @RequestParam("skills") String skills, @RequestParam("addr_type") String addr_type, @RequestParam("addr_loc_countryRegion") String addr_loc_countryRegion, @RequestParam("addr_loc_state") String addr_loc_state, @RequestParam("addr_loc_city") String addr_loc_city, @RequestParam("addr_postalCode") String addr_postalCode, @RequestParam("email") String email, @RequestParam("webSite") String webSite, @RequestParam("modifiedDate") LocalDateTime modifiedDate) throws EntityNotFoundException {
+        VjobCandidateId vjobcandidateId = new VjobCandidateId();
+        vjobcandidateId.setJobCandidateId(jobCandidateId);
+        vjobcandidateId.setBusinessEntityId(businessEntityId);
+        vjobcandidateId.setName_prefix(name_prefix);
+        vjobcandidateId.setName_first(name_first);
+        vjobcandidateId.setName_middle(name_middle);
+        vjobcandidateId.setName_last(name_last);
+        vjobcandidateId.setName_suffix(name_suffix);
+        vjobcandidateId.setSkills(skills);
+        vjobcandidateId.setAddr_type(addr_type);
+        vjobcandidateId.setAddr_loc_countryRegion(addr_loc_countryRegion);
+        vjobcandidateId.setAddr_loc_state(addr_loc_state);
+        vjobcandidateId.setAddr_loc_city(addr_loc_city);
+        vjobcandidateId.setAddr_postalCode(addr_postalCode);
+        vjobcandidateId.setEmail(email);
+        vjobcandidateId.setWebSite(webSite);
+        vjobcandidateId.setModifiedDate(modifiedDate);
+        LOGGER.debug("Deleting VjobCandidate with id: {}", vjobcandidateId);
+        VjobCandidate vjobCandidate = vjobCandidateService.delete(vjobcandidateId);
+        return vjobCandidate != null;
+    }
+
     /**
      * @deprecated Use {@link #findVjobCandidates(String, Pageable)} instead.
      */
@@ -88,6 +148,14 @@ public class VjobCandidateController {
     @RequestMapping(method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<VjobCandidate> findVjobCandidates(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering VjobCandidates list");
+        return vjobCandidateService.findAll(query, pageable);
+    }
+
+    @ApiOperation(value = "Returns the paginated list of VjobCandidate instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<VjobCandidate> filterVjobCandidates(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
         LOGGER.debug("Rendering VjobCandidates list");
         return vjobCandidateService.findAll(query, pageable);
     }

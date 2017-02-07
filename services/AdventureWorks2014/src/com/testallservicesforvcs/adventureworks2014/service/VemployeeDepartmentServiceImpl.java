@@ -44,6 +44,14 @@ public class VemployeeDepartmentServiceImpl implements VemployeeDepartmentServic
         this.wmGenericDao = wmGenericDao;
     }
 
+    @Transactional(value = "AdventureWorks2014TransactionManager")
+    @Override
+	public VemployeeDepartment create(VemployeeDepartment vemployeeDepartment) {
+        LOGGER.debug("Creating a new VemployeeDepartment with information: {}", vemployeeDepartment);
+        VemployeeDepartment vemployeeDepartmentCreated = this.wmGenericDao.create(vemployeeDepartment);
+        return vemployeeDepartmentCreated;
+    }
+
 	@Transactional(readOnly = true, value = "AdventureWorks2014TransactionManager")
 	@Override
 	public VemployeeDepartment getById(VemployeeDepartmentId vemployeedepartmentId) throws EntityNotFoundException {
@@ -63,6 +71,40 @@ public class VemployeeDepartmentServiceImpl implements VemployeeDepartmentServic
         return this.wmGenericDao.findById(vemployeedepartmentId);
     }
 
+
+	@Transactional(rollbackFor = EntityNotFoundException.class, value = "AdventureWorks2014TransactionManager")
+	@Override
+	public VemployeeDepartment update(VemployeeDepartment vemployeeDepartment) throws EntityNotFoundException {
+        LOGGER.debug("Updating VemployeeDepartment with information: {}", vemployeeDepartment);
+        this.wmGenericDao.update(vemployeeDepartment);
+
+        VemployeeDepartmentId vemployeedepartmentId = new VemployeeDepartmentId();
+        vemployeedepartmentId.setBusinessEntityId(vemployeeDepartment.getBusinessEntityId());
+        vemployeedepartmentId.setTitle(vemployeeDepartment.getTitle());
+        vemployeedepartmentId.setFirstName(vemployeeDepartment.getFirstName());
+        vemployeedepartmentId.setMiddleName(vemployeeDepartment.getMiddleName());
+        vemployeedepartmentId.setLastName(vemployeeDepartment.getLastName());
+        vemployeedepartmentId.setSuffix(vemployeeDepartment.getSuffix());
+        vemployeedepartmentId.setJobTitle(vemployeeDepartment.getJobTitle());
+        vemployeedepartmentId.setDepartment(vemployeeDepartment.getDepartment());
+        vemployeedepartmentId.setGroupName(vemployeeDepartment.getGroupName());
+        vemployeedepartmentId.setStartDate(vemployeeDepartment.getStartDate());
+
+        return this.wmGenericDao.findById(vemployeedepartmentId);
+    }
+
+    @Transactional(value = "AdventureWorks2014TransactionManager")
+	@Override
+	public VemployeeDepartment delete(VemployeeDepartmentId vemployeedepartmentId) throws EntityNotFoundException {
+        LOGGER.debug("Deleting VemployeeDepartment with id: {}", vemployeedepartmentId);
+        VemployeeDepartment deleted = this.wmGenericDao.findById(vemployeedepartmentId);
+        if (deleted == null) {
+            LOGGER.debug("No VemployeeDepartment found with id: {}", vemployeedepartmentId);
+            throw new EntityNotFoundException(String.valueOf(vemployeedepartmentId));
+        }
+        this.wmGenericDao.delete(deleted);
+        return deleted;
+    }
 
 	@Transactional(readOnly = true, value = "AdventureWorks2014TransactionManager")
 	@Override

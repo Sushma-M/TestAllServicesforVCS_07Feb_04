@@ -22,6 +22,16 @@ import com.testallservicesforvcs.adventureworks2014.VjobCandidateId;
  */
 public interface VjobCandidateService {
 
+    /**
+     * Creates a new VjobCandidate. It does cascade insert for all the children in a single transaction.
+     *
+     * This method overrides the input field values using Server side or database managed properties defined on VjobCandidate if any.
+     *
+     * @param vjobCandidate Details of the VjobCandidate to be created; value cannot be null.
+     * @return The newly created VjobCandidate.
+     */
+	VjobCandidate create(VjobCandidate vjobCandidate);
+
 
 	/**
 	 * Returns VjobCandidate by given id if exists.
@@ -40,6 +50,26 @@ public interface VjobCandidateService {
 	 */
 	VjobCandidate findById(VjobCandidateId vjobcandidateId);
 
+
+	/**
+	 * Updates the details of an existing VjobCandidate. It replaces all fields of the existing VjobCandidate with the given vjobCandidate.
+	 *
+     * This method overrides the input field values using Server side or database managed properties defined on VjobCandidate if any.
+     *
+	 * @param vjobCandidate The details of the VjobCandidate to be updated; value cannot be null.
+	 * @return The updated VjobCandidate.
+	 * @throws EntityNotFoundException if no VjobCandidate is found with given input.
+	 */
+	VjobCandidate update(VjobCandidate vjobCandidate) throws EntityNotFoundException;
+
+    /**
+	 * Deletes an existing VjobCandidate with the given id.
+	 *
+	 * @param vjobcandidateId The id of the VjobCandidate to be deleted; value cannot be null.
+	 * @return The deleted VjobCandidate.
+	 * @throws EntityNotFoundException if no VjobCandidate found with the given id.
+	 */
+	VjobCandidate delete(VjobCandidateId vjobcandidateId) throws EntityNotFoundException;
 
 	/**
 	 * Find all VjobCandidates matching the given QueryFilter(s).

@@ -104,6 +104,14 @@ public class EmployeeController {
         return employeeService.findAll(query, pageable);
     }
 
+    @ApiOperation(value = "Returns the paginated list of Employee instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<Employee> filterEmployees(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering Employees list");
+        return employeeService.findAll(query, pageable);
+    }
+
     @ApiOperation(value = "Returns downloadable file for the data.")
     @RequestMapping(value = "/export/{exportType}", method = RequestMethod.GET, produces = "application/octet-stream")
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
@@ -119,15 +127,17 @@ public class EmployeeController {
         return employeeService.count(query);
     }
 
-    @RequestMapping(value = "/{id:.+}/employeesForManagerId", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/employeesForManagerId", method = RequestMethod.GET)
     @ApiOperation(value = "Gets the employeesForManagerId instance associated with the given id.")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<Employee> findAssociatedEmployeesForManagerId(@PathVariable("id") Integer id, Pageable pageable) {
         LOGGER.debug("Fetching all associated employeesForManagerId");
         return employeeService.findAssociatedEmployeesForManagerId(id, pageable);
     }
 
-    @RequestMapping(value = "/{id:.+}/vacations", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/vacations", method = RequestMethod.GET)
     @ApiOperation(value = "Gets the vacations instance associated with the given id.")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<Vacation> findAssociatedVacations(@PathVariable("id") Integer id, Pageable pageable) {
         LOGGER.debug("Fetching all associated vacations");
         return employeeService.findAssociatedVacations(id, pageable);

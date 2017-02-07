@@ -45,10 +45,20 @@ public class VemployeeDepartmentController {
     @Qualifier("AdventureWorks2014.VemployeeDepartmentService")
     private VemployeeDepartmentService vemployeeDepartmentService;
 
+    @ApiOperation(value = "Creates a new VemployeeDepartment instance.")
+    @RequestMapping(method = RequestMethod.POST)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public VemployeeDepartment createVemployeeDepartment(@RequestBody VemployeeDepartment vemployeeDepartment) {
+        LOGGER.debug("Create VemployeeDepartment with information: {}", vemployeeDepartment);
+        vemployeeDepartment = vemployeeDepartmentService.create(vemployeeDepartment);
+        LOGGER.debug("Created VemployeeDepartment with information: {}", vemployeeDepartment);
+        return vemployeeDepartment;
+    }
+
     @ApiOperation(value = "Returns the VemployeeDepartment instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public VemployeeDepartment getVemployeeDepartment(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("jobTitle") String jobTitle, @RequestParam("department") String department, @RequestParam("groupName") String groupName, @RequestParam("startDate") Date startDate) throws EntityNotFoundException {
+    public VemployeeDepartment getVemployeeDepartment(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "title", required = true) String title, @RequestParam(value = "firstName", required = true) String firstName, @RequestParam(value = "middleName", required = true) String middleName, @RequestParam(value = "lastName", required = true) String lastName, @RequestParam(value = "suffix", required = true) String suffix, @RequestParam(value = "jobTitle", required = true) String jobTitle, @RequestParam(value = "department", required = true) String department, @RequestParam(value = "groupName", required = true) String groupName, @RequestParam(value = "startDate", required = true) Date startDate) throws EntityNotFoundException {
         VemployeeDepartmentId vemployeedepartmentId = new VemployeeDepartmentId();
         vemployeedepartmentId.setBusinessEntityId(businessEntityId);
         vemployeedepartmentId.setTitle(title);
@@ -64,6 +74,44 @@ public class VemployeeDepartmentController {
         VemployeeDepartment vemployeeDepartment = vemployeeDepartmentService.getById(vemployeedepartmentId);
         LOGGER.debug("VemployeeDepartment details with id: {}", vemployeeDepartment);
         return vemployeeDepartment;
+    }
+
+    @ApiOperation(value = "Updates the VemployeeDepartment instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.PUT)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public VemployeeDepartment editVemployeeDepartment(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("jobTitle") String jobTitle, @RequestParam("department") String department, @RequestParam("groupName") String groupName, @RequestParam("startDate") Date startDate, @RequestBody VemployeeDepartment vemployeeDepartment) throws EntityNotFoundException {
+        vemployeeDepartment.setBusinessEntityId(businessEntityId);
+        vemployeeDepartment.setTitle(title);
+        vemployeeDepartment.setFirstName(firstName);
+        vemployeeDepartment.setMiddleName(middleName);
+        vemployeeDepartment.setLastName(lastName);
+        vemployeeDepartment.setSuffix(suffix);
+        vemployeeDepartment.setJobTitle(jobTitle);
+        vemployeeDepartment.setDepartment(department);
+        vemployeeDepartment.setGroupName(groupName);
+        vemployeeDepartment.setStartDate(startDate);
+        LOGGER.debug("VemployeeDepartment details with id is updated with: {}", vemployeeDepartment);
+        return vemployeeDepartmentService.update(vemployeeDepartment);
+    }
+
+    @ApiOperation(value = "Deletes the VemployeeDepartment instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.DELETE)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public boolean deleteVemployeeDepartment(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("jobTitle") String jobTitle, @RequestParam("department") String department, @RequestParam("groupName") String groupName, @RequestParam("startDate") Date startDate) throws EntityNotFoundException {
+        VemployeeDepartmentId vemployeedepartmentId = new VemployeeDepartmentId();
+        vemployeedepartmentId.setBusinessEntityId(businessEntityId);
+        vemployeedepartmentId.setTitle(title);
+        vemployeedepartmentId.setFirstName(firstName);
+        vemployeedepartmentId.setMiddleName(middleName);
+        vemployeedepartmentId.setLastName(lastName);
+        vemployeedepartmentId.setSuffix(suffix);
+        vemployeedepartmentId.setJobTitle(jobTitle);
+        vemployeedepartmentId.setDepartment(department);
+        vemployeedepartmentId.setGroupName(groupName);
+        vemployeedepartmentId.setStartDate(startDate);
+        LOGGER.debug("Deleting VemployeeDepartment with id: {}", vemployeedepartmentId);
+        VemployeeDepartment vemployeeDepartment = vemployeeDepartmentService.delete(vemployeedepartmentId);
+        return vemployeeDepartment != null;
     }
 
     /**
@@ -82,6 +130,14 @@ public class VemployeeDepartmentController {
     @RequestMapping(method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<VemployeeDepartment> findVemployeeDepartments(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering VemployeeDepartments list");
+        return vemployeeDepartmentService.findAll(query, pageable);
+    }
+
+    @ApiOperation(value = "Returns the paginated list of VemployeeDepartment instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<VemployeeDepartment> filterVemployeeDepartments(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
         LOGGER.debug("Rendering VemployeeDepartments list");
         return vemployeeDepartmentService.findAll(query, pageable);
     }

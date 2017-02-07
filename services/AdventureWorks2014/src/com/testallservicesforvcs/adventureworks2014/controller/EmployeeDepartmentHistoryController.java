@@ -58,7 +58,7 @@ public class EmployeeDepartmentHistoryController {
     @ApiOperation(value = "Returns the EmployeeDepartmentHistory instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public EmployeeDepartmentHistory getEmployeeDepartmentHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("startDate") Date startDate, @RequestParam("departmentId") Short departmentId, @RequestParam("shiftId") Short shiftId) throws EntityNotFoundException {
+    public EmployeeDepartmentHistory getEmployeeDepartmentHistory(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "startDate", required = true) Date startDate, @RequestParam(value = "departmentId", required = true) Short departmentId, @RequestParam(value = "shiftId", required = true) Short shiftId) throws EntityNotFoundException {
         EmployeeDepartmentHistoryId employeedepartmenthistoryId = new EmployeeDepartmentHistoryId();
         employeedepartmenthistoryId.setBusinessEntityId(businessEntityId);
         employeedepartmenthistoryId.setStartDate(startDate);
@@ -73,7 +73,7 @@ public class EmployeeDepartmentHistoryController {
     @ApiOperation(value = "Updates the EmployeeDepartmentHistory instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.PUT)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public EmployeeDepartmentHistory editEmployeeDepartmentHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("startDate") Date startDate, @RequestParam("departmentId") Short departmentId, @RequestParam("shiftId") Short shiftId, @RequestBody EmployeeDepartmentHistory employeeDepartmentHistory) throws EntityNotFoundException {
+    public EmployeeDepartmentHistory editEmployeeDepartmentHistory(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "startDate", required = true) Date startDate, @RequestParam(value = "departmentId", required = true) Short departmentId, @RequestParam(value = "shiftId", required = true) Short shiftId, @RequestBody EmployeeDepartmentHistory employeeDepartmentHistory) throws EntityNotFoundException {
         employeeDepartmentHistory.setBusinessEntityId(businessEntityId);
         employeeDepartmentHistory.setStartDate(startDate);
         employeeDepartmentHistory.setDepartmentId(departmentId);
@@ -85,7 +85,7 @@ public class EmployeeDepartmentHistoryController {
     @ApiOperation(value = "Deletes the EmployeeDepartmentHistory instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.DELETE)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public boolean deleteEmployeeDepartmentHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("startDate") Date startDate, @RequestParam("departmentId") Short departmentId, @RequestParam("shiftId") Short shiftId) throws EntityNotFoundException {
+    public boolean deleteEmployeeDepartmentHistory(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "startDate", required = true) Date startDate, @RequestParam(value = "departmentId", required = true) Short departmentId, @RequestParam(value = "shiftId", required = true) Short shiftId) throws EntityNotFoundException {
         EmployeeDepartmentHistoryId employeedepartmenthistoryId = new EmployeeDepartmentHistoryId();
         employeedepartmenthistoryId.setBusinessEntityId(businessEntityId);
         employeedepartmenthistoryId.setStartDate(startDate);
@@ -112,6 +112,14 @@ public class EmployeeDepartmentHistoryController {
     @RequestMapping(method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<EmployeeDepartmentHistory> findEmployeeDepartmentHistories(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering EmployeeDepartmentHistories list");
+        return employeeDepartmentHistoryService.findAll(query, pageable);
+    }
+
+    @ApiOperation(value = "Returns the paginated list of EmployeeDepartmentHistory instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<EmployeeDepartmentHistory> filterEmployeeDepartmentHistories(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
         LOGGER.debug("Rendering EmployeeDepartmentHistories list");
         return employeeDepartmentHistoryService.findAll(query, pageable);
     }

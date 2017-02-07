@@ -22,6 +22,16 @@ import com.testallservicesforvcs.adventureworks2014.VjobCandidateEmploymentId;
  */
 public interface VjobCandidateEmploymentService {
 
+    /**
+     * Creates a new VjobCandidateEmployment. It does cascade insert for all the children in a single transaction.
+     *
+     * This method overrides the input field values using Server side or database managed properties defined on VjobCandidateEmployment if any.
+     *
+     * @param vjobCandidateEmployment Details of the VjobCandidateEmployment to be created; value cannot be null.
+     * @return The newly created VjobCandidateEmployment.
+     */
+	VjobCandidateEmployment create(VjobCandidateEmployment vjobCandidateEmployment);
+
 
 	/**
 	 * Returns VjobCandidateEmployment by given id if exists.
@@ -40,6 +50,26 @@ public interface VjobCandidateEmploymentService {
 	 */
 	VjobCandidateEmployment findById(VjobCandidateEmploymentId vjobcandidateemploymentId);
 
+
+	/**
+	 * Updates the details of an existing VjobCandidateEmployment. It replaces all fields of the existing VjobCandidateEmployment with the given vjobCandidateEmployment.
+	 *
+     * This method overrides the input field values using Server side or database managed properties defined on VjobCandidateEmployment if any.
+     *
+	 * @param vjobCandidateEmployment The details of the VjobCandidateEmployment to be updated; value cannot be null.
+	 * @return The updated VjobCandidateEmployment.
+	 * @throws EntityNotFoundException if no VjobCandidateEmployment is found with given input.
+	 */
+	VjobCandidateEmployment update(VjobCandidateEmployment vjobCandidateEmployment) throws EntityNotFoundException;
+
+    /**
+	 * Deletes an existing VjobCandidateEmployment with the given id.
+	 *
+	 * @param vjobcandidateemploymentId The id of the VjobCandidateEmployment to be deleted; value cannot be null.
+	 * @return The deleted VjobCandidateEmployment.
+	 * @throws EntityNotFoundException if no VjobCandidateEmployment found with the given id.
+	 */
+	VjobCandidateEmployment delete(VjobCandidateEmploymentId vjobcandidateemploymentId) throws EntityNotFoundException;
 
 	/**
 	 * Find all VjobCandidateEmployments matching the given QueryFilter(s).

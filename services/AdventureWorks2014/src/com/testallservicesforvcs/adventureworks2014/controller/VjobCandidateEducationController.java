@@ -45,10 +45,20 @@ public class VjobCandidateEducationController {
     @Qualifier("AdventureWorks2014.VjobCandidateEducationService")
     private VjobCandidateEducationService vjobCandidateEducationService;
 
+    @ApiOperation(value = "Creates a new VjobCandidateEducation instance.")
+    @RequestMapping(method = RequestMethod.POST)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public VjobCandidateEducation createVjobCandidateEducation(@RequestBody VjobCandidateEducation vjobCandidateEducation) {
+        LOGGER.debug("Create VjobCandidateEducation with information: {}", vjobCandidateEducation);
+        vjobCandidateEducation = vjobCandidateEducationService.create(vjobCandidateEducation);
+        LOGGER.debug("Created VjobCandidateEducation with information: {}", vjobCandidateEducation);
+        return vjobCandidateEducation;
+    }
+
     @ApiOperation(value = "Returns the VjobCandidateEducation instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public VjobCandidateEducation getVjobCandidateEducation(@RequestParam("jobCandidateId") Integer jobCandidateId, @RequestParam("edu_level") String edu_level, @RequestParam("edu_startDate") LocalDateTime edu_startDate, @RequestParam("edu_endDate") LocalDateTime edu_endDate, @RequestParam("edu_degree") String edu_degree, @RequestParam("edu_major") String edu_major, @RequestParam("edu_minor") String edu_minor, @RequestParam("edu_gpa") String edu_gpa, @RequestParam("edu_gpascale") String edu_gpascale, @RequestParam("edu_school") String edu_school, @RequestParam("edu_loc_countryRegion") String edu_loc_countryRegion, @RequestParam("edu_loc_state") String edu_loc_state, @RequestParam("edu_loc_city") String edu_loc_city) throws EntityNotFoundException {
+    public VjobCandidateEducation getVjobCandidateEducation(@RequestParam(value = "jobCandidateId", required = true) Integer jobCandidateId, @RequestParam(value = "edu_level", required = true) String edu_level, @RequestParam(value = "edu_startDate", required = true) LocalDateTime edu_startDate, @RequestParam(value = "edu_endDate", required = true) LocalDateTime edu_endDate, @RequestParam(value = "edu_degree", required = true) String edu_degree, @RequestParam(value = "edu_major", required = true) String edu_major, @RequestParam(value = "edu_minor", required = true) String edu_minor, @RequestParam(value = "edu_gpa", required = true) String edu_gpa, @RequestParam(value = "edu_gpascale", required = true) String edu_gpascale, @RequestParam(value = "edu_school", required = true) String edu_school, @RequestParam(value = "edu_loc_countryRegion", required = true) String edu_loc_countryRegion, @RequestParam(value = "edu_loc_state", required = true) String edu_loc_state, @RequestParam(value = "edu_loc_city", required = true) String edu_loc_city) throws EntityNotFoundException {
         VjobCandidateEducationId vjobcandidateeducationId = new VjobCandidateEducationId();
         vjobcandidateeducationId.setJobCandidateId(jobCandidateId);
         vjobcandidateeducationId.setEdu_level(edu_level);
@@ -69,6 +79,50 @@ public class VjobCandidateEducationController {
         return vjobCandidateEducation;
     }
 
+    @ApiOperation(value = "Updates the VjobCandidateEducation instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.PUT)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public VjobCandidateEducation editVjobCandidateEducation(@RequestParam("jobCandidateId") Integer jobCandidateId, @RequestParam("edu_level") String edu_level, @RequestParam("edu_startDate") LocalDateTime edu_startDate, @RequestParam("edu_endDate") LocalDateTime edu_endDate, @RequestParam("edu_degree") String edu_degree, @RequestParam("edu_major") String edu_major, @RequestParam("edu_minor") String edu_minor, @RequestParam("edu_gpa") String edu_gpa, @RequestParam("edu_gpascale") String edu_gpascale, @RequestParam("edu_school") String edu_school, @RequestParam("edu_loc_countryRegion") String edu_loc_countryRegion, @RequestParam("edu_loc_state") String edu_loc_state, @RequestParam("edu_loc_city") String edu_loc_city, @RequestBody VjobCandidateEducation vjobCandidateEducation) throws EntityNotFoundException {
+        vjobCandidateEducation.setJobCandidateId(jobCandidateId);
+        vjobCandidateEducation.setEdu_level(edu_level);
+        vjobCandidateEducation.setEdu_startDate(edu_startDate);
+        vjobCandidateEducation.setEdu_endDate(edu_endDate);
+        vjobCandidateEducation.setEdu_degree(edu_degree);
+        vjobCandidateEducation.setEdu_major(edu_major);
+        vjobCandidateEducation.setEdu_minor(edu_minor);
+        vjobCandidateEducation.setEdu_gpa(edu_gpa);
+        vjobCandidateEducation.setEdu_gpascale(edu_gpascale);
+        vjobCandidateEducation.setEdu_school(edu_school);
+        vjobCandidateEducation.setEdu_loc_countryRegion(edu_loc_countryRegion);
+        vjobCandidateEducation.setEdu_loc_state(edu_loc_state);
+        vjobCandidateEducation.setEdu_loc_city(edu_loc_city);
+        LOGGER.debug("VjobCandidateEducation details with id is updated with: {}", vjobCandidateEducation);
+        return vjobCandidateEducationService.update(vjobCandidateEducation);
+    }
+
+    @ApiOperation(value = "Deletes the VjobCandidateEducation instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.DELETE)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public boolean deleteVjobCandidateEducation(@RequestParam("jobCandidateId") Integer jobCandidateId, @RequestParam("edu_level") String edu_level, @RequestParam("edu_startDate") LocalDateTime edu_startDate, @RequestParam("edu_endDate") LocalDateTime edu_endDate, @RequestParam("edu_degree") String edu_degree, @RequestParam("edu_major") String edu_major, @RequestParam("edu_minor") String edu_minor, @RequestParam("edu_gpa") String edu_gpa, @RequestParam("edu_gpascale") String edu_gpascale, @RequestParam("edu_school") String edu_school, @RequestParam("edu_loc_countryRegion") String edu_loc_countryRegion, @RequestParam("edu_loc_state") String edu_loc_state, @RequestParam("edu_loc_city") String edu_loc_city) throws EntityNotFoundException {
+        VjobCandidateEducationId vjobcandidateeducationId = new VjobCandidateEducationId();
+        vjobcandidateeducationId.setJobCandidateId(jobCandidateId);
+        vjobcandidateeducationId.setEdu_level(edu_level);
+        vjobcandidateeducationId.setEdu_startDate(edu_startDate);
+        vjobcandidateeducationId.setEdu_endDate(edu_endDate);
+        vjobcandidateeducationId.setEdu_degree(edu_degree);
+        vjobcandidateeducationId.setEdu_major(edu_major);
+        vjobcandidateeducationId.setEdu_minor(edu_minor);
+        vjobcandidateeducationId.setEdu_gpa(edu_gpa);
+        vjobcandidateeducationId.setEdu_gpascale(edu_gpascale);
+        vjobcandidateeducationId.setEdu_school(edu_school);
+        vjobcandidateeducationId.setEdu_loc_countryRegion(edu_loc_countryRegion);
+        vjobcandidateeducationId.setEdu_loc_state(edu_loc_state);
+        vjobcandidateeducationId.setEdu_loc_city(edu_loc_city);
+        LOGGER.debug("Deleting VjobCandidateEducation with id: {}", vjobcandidateeducationId);
+        VjobCandidateEducation vjobCandidateEducation = vjobCandidateEducationService.delete(vjobcandidateeducationId);
+        return vjobCandidateEducation != null;
+    }
+
     /**
      * @deprecated Use {@link #findVjobCandidateEducations(String, Pageable)} instead.
      */
@@ -85,6 +139,14 @@ public class VjobCandidateEducationController {
     @RequestMapping(method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<VjobCandidateEducation> findVjobCandidateEducations(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering VjobCandidateEducations list");
+        return vjobCandidateEducationService.findAll(query, pageable);
+    }
+
+    @ApiOperation(value = "Returns the paginated list of VjobCandidateEducation instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<VjobCandidateEducation> filterVjobCandidateEducations(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
         LOGGER.debug("Rendering VjobCandidateEducations list");
         return vjobCandidateEducationService.findAll(query, pageable);
     }

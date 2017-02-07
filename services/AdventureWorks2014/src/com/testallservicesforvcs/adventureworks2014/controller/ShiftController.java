@@ -87,6 +87,7 @@ public class ShiftController {
 
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
     @ApiOperation(value = "Returns the matching Shift with given unique key values.")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Shift getByName(@PathVariable("name") String name) {
         LOGGER.debug("Getting Shift with uniques key Name");
         return shiftService.getByName(name);
@@ -94,7 +95,8 @@ public class ShiftController {
 
     @RequestMapping(value = "/startTime-endTime", method = RequestMethod.GET)
     @ApiOperation(value = "Returns the matching Shift with given unique key values.")
-    public Shift getByStartTimeAndEndTime(@RequestParam(name = "startTime") Date startTime, @RequestParam(name = "endTime") Date endTime) {
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Shift getByStartTimeAndEndTime(@RequestParam(value = "null", required = true) Date startTime, @RequestParam(value = "null", required = true) Date endTime) {
         LOGGER.debug("Getting Shift with uniques key StartTimeAndEndTime");
         return shiftService.getByStartTimeAndEndTime(startTime, endTime);
     }
@@ -119,6 +121,14 @@ public class ShiftController {
         return shiftService.findAll(query, pageable);
     }
 
+    @ApiOperation(value = "Returns the paginated list of Shift instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<Shift> filterShifts(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering Shifts list");
+        return shiftService.findAll(query, pageable);
+    }
+
     @ApiOperation(value = "Returns downloadable file for the data.")
     @RequestMapping(value = "/export/{exportType}", method = RequestMethod.GET, produces = "application/octet-stream")
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
@@ -134,8 +144,9 @@ public class ShiftController {
         return shiftService.count(query);
     }
 
-    @RequestMapping(value = "/{id:.+}/employeeDepartmentHistories", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/employeeDepartmentHistories", method = RequestMethod.GET)
     @ApiOperation(value = "Gets the employeeDepartmentHistories instance associated with the given id.")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<EmployeeDepartmentHistory> findAssociatedEmployeeDepartmentHistories(@PathVariable("id") Short id, Pageable pageable) {
         LOGGER.debug("Fetching all associated employeeDepartmentHistories");
         return shiftService.findAssociatedEmployeeDepartmentHistories(id, pageable);

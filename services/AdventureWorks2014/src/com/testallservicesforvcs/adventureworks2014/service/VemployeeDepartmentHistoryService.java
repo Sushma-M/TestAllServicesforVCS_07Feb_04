@@ -22,6 +22,16 @@ import com.testallservicesforvcs.adventureworks2014.VemployeeDepartmentHistoryId
  */
 public interface VemployeeDepartmentHistoryService {
 
+    /**
+     * Creates a new VemployeeDepartmentHistory. It does cascade insert for all the children in a single transaction.
+     *
+     * This method overrides the input field values using Server side or database managed properties defined on VemployeeDepartmentHistory if any.
+     *
+     * @param vemployeeDepartmentHistory Details of the VemployeeDepartmentHistory to be created; value cannot be null.
+     * @return The newly created VemployeeDepartmentHistory.
+     */
+	VemployeeDepartmentHistory create(VemployeeDepartmentHistory vemployeeDepartmentHistory);
+
 
 	/**
 	 * Returns VemployeeDepartmentHistory by given id if exists.
@@ -40,6 +50,26 @@ public interface VemployeeDepartmentHistoryService {
 	 */
 	VemployeeDepartmentHistory findById(VemployeeDepartmentHistoryId vemployeedepartmenthistoryId);
 
+
+	/**
+	 * Updates the details of an existing VemployeeDepartmentHistory. It replaces all fields of the existing VemployeeDepartmentHistory with the given vemployeeDepartmentHistory.
+	 *
+     * This method overrides the input field values using Server side or database managed properties defined on VemployeeDepartmentHistory if any.
+     *
+	 * @param vemployeeDepartmentHistory The details of the VemployeeDepartmentHistory to be updated; value cannot be null.
+	 * @return The updated VemployeeDepartmentHistory.
+	 * @throws EntityNotFoundException if no VemployeeDepartmentHistory is found with given input.
+	 */
+	VemployeeDepartmentHistory update(VemployeeDepartmentHistory vemployeeDepartmentHistory) throws EntityNotFoundException;
+
+    /**
+	 * Deletes an existing VemployeeDepartmentHistory with the given id.
+	 *
+	 * @param vemployeedepartmenthistoryId The id of the VemployeeDepartmentHistory to be deleted; value cannot be null.
+	 * @return The deleted VemployeeDepartmentHistory.
+	 * @throws EntityNotFoundException if no VemployeeDepartmentHistory found with the given id.
+	 */
+	VemployeeDepartmentHistory delete(VemployeeDepartmentHistoryId vemployeedepartmenthistoryId) throws EntityNotFoundException;
 
 	/**
 	 * Find all VemployeeDepartmentHistories matching the given QueryFilter(s).

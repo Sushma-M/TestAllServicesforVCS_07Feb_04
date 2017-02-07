@@ -44,10 +44,20 @@ public class VemployeeController {
     @Qualifier("AdventureWorks2014.VemployeeService")
     private VemployeeService vemployeeService;
 
+    @ApiOperation(value = "Creates a new Vemployee instance.")
+    @RequestMapping(method = RequestMethod.POST)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Vemployee createVemployee(@RequestBody Vemployee vemployee) {
+        LOGGER.debug("Create Vemployee with information: {}", vemployee);
+        vemployee = vemployeeService.create(vemployee);
+        LOGGER.debug("Created Vemployee with information: {}", vemployee);
+        return vemployee;
+    }
+
     @ApiOperation(value = "Returns the Vemployee instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public Vemployee getVemployee(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("jobTitle") String jobTitle, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("phoneNumberType") String phoneNumberType, @RequestParam("emailAddress") String emailAddress, @RequestParam("emailPromotion") Integer emailPromotion, @RequestParam("addressLine1") String addressLine1, @RequestParam("addressLine2") String addressLine2, @RequestParam("city") String city, @RequestParam("stateProvinceName") String stateProvinceName, @RequestParam("postalCode") String postalCode, @RequestParam("countryRegionName") String countryRegionName, @RequestParam("additionalContactInfo") String additionalContactInfo) throws EntityNotFoundException {
+    public Vemployee getVemployee(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "title", required = true) String title, @RequestParam(value = "firstName", required = true) String firstName, @RequestParam(value = "middleName", required = true) String middleName, @RequestParam(value = "lastName", required = true) String lastName, @RequestParam(value = "suffix", required = true) String suffix, @RequestParam(value = "jobTitle", required = true) String jobTitle, @RequestParam(value = "phoneNumber", required = true) String phoneNumber, @RequestParam(value = "phoneNumberType", required = true) String phoneNumberType, @RequestParam(value = "emailAddress", required = true) String emailAddress, @RequestParam(value = "emailPromotion", required = true) Integer emailPromotion, @RequestParam(value = "addressLine1", required = true) String addressLine1, @RequestParam(value = "addressLine2", required = true) String addressLine2, @RequestParam(value = "city", required = true) String city, @RequestParam(value = "stateProvinceName", required = true) String stateProvinceName, @RequestParam(value = "postalCode", required = true) String postalCode, @RequestParam(value = "countryRegionName", required = true) String countryRegionName, @RequestParam(value = "additionalContactInfo", required = true) String additionalContactInfo) throws EntityNotFoundException {
         VemployeeId vemployeeId = new VemployeeId();
         vemployeeId.setBusinessEntityId(businessEntityId);
         vemployeeId.setTitle(title);
@@ -73,6 +83,60 @@ public class VemployeeController {
         return vemployee;
     }
 
+    @ApiOperation(value = "Updates the Vemployee instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.PUT)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Vemployee editVemployee(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("jobTitle") String jobTitle, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("phoneNumberType") String phoneNumberType, @RequestParam("emailAddress") String emailAddress, @RequestParam("emailPromotion") Integer emailPromotion, @RequestParam("addressLine1") String addressLine1, @RequestParam("addressLine2") String addressLine2, @RequestParam("city") String city, @RequestParam("stateProvinceName") String stateProvinceName, @RequestParam("postalCode") String postalCode, @RequestParam("countryRegionName") String countryRegionName, @RequestParam("additionalContactInfo") String additionalContactInfo, @RequestBody Vemployee vemployee) throws EntityNotFoundException {
+        vemployee.setBusinessEntityId(businessEntityId);
+        vemployee.setTitle(title);
+        vemployee.setFirstName(firstName);
+        vemployee.setMiddleName(middleName);
+        vemployee.setLastName(lastName);
+        vemployee.setSuffix(suffix);
+        vemployee.setJobTitle(jobTitle);
+        vemployee.setPhoneNumber(phoneNumber);
+        vemployee.setPhoneNumberType(phoneNumberType);
+        vemployee.setEmailAddress(emailAddress);
+        vemployee.setEmailPromotion(emailPromotion);
+        vemployee.setAddressLine1(addressLine1);
+        vemployee.setAddressLine2(addressLine2);
+        vemployee.setCity(city);
+        vemployee.setStateProvinceName(stateProvinceName);
+        vemployee.setPostalCode(postalCode);
+        vemployee.setCountryRegionName(countryRegionName);
+        vemployee.setAdditionalContactInfo(additionalContactInfo);
+        LOGGER.debug("Vemployee details with id is updated with: {}", vemployee);
+        return vemployeeService.update(vemployee);
+    }
+
+    @ApiOperation(value = "Deletes the Vemployee instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.DELETE)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public boolean deleteVemployee(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("jobTitle") String jobTitle, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("phoneNumberType") String phoneNumberType, @RequestParam("emailAddress") String emailAddress, @RequestParam("emailPromotion") Integer emailPromotion, @RequestParam("addressLine1") String addressLine1, @RequestParam("addressLine2") String addressLine2, @RequestParam("city") String city, @RequestParam("stateProvinceName") String stateProvinceName, @RequestParam("postalCode") String postalCode, @RequestParam("countryRegionName") String countryRegionName, @RequestParam("additionalContactInfo") String additionalContactInfo) throws EntityNotFoundException {
+        VemployeeId vemployeeId = new VemployeeId();
+        vemployeeId.setBusinessEntityId(businessEntityId);
+        vemployeeId.setTitle(title);
+        vemployeeId.setFirstName(firstName);
+        vemployeeId.setMiddleName(middleName);
+        vemployeeId.setLastName(lastName);
+        vemployeeId.setSuffix(suffix);
+        vemployeeId.setJobTitle(jobTitle);
+        vemployeeId.setPhoneNumber(phoneNumber);
+        vemployeeId.setPhoneNumberType(phoneNumberType);
+        vemployeeId.setEmailAddress(emailAddress);
+        vemployeeId.setEmailPromotion(emailPromotion);
+        vemployeeId.setAddressLine1(addressLine1);
+        vemployeeId.setAddressLine2(addressLine2);
+        vemployeeId.setCity(city);
+        vemployeeId.setStateProvinceName(stateProvinceName);
+        vemployeeId.setPostalCode(postalCode);
+        vemployeeId.setCountryRegionName(countryRegionName);
+        vemployeeId.setAdditionalContactInfo(additionalContactInfo);
+        LOGGER.debug("Deleting Vemployee with id: {}", vemployeeId);
+        Vemployee vemployee = vemployeeService.delete(vemployeeId);
+        return vemployee != null;
+    }
+
     /**
      * @deprecated Use {@link #findVemployees(String, Pageable)} instead.
      */
@@ -89,6 +153,14 @@ public class VemployeeController {
     @RequestMapping(method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<Vemployee> findVemployees(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering Vemployees list");
+        return vemployeeService.findAll(query, pageable);
+    }
+
+    @ApiOperation(value = "Returns the paginated list of Vemployee instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<Vemployee> filterVemployees(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
         LOGGER.debug("Rendering Vemployees list");
         return vemployeeService.findAll(query, pageable);
     }

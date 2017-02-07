@@ -44,6 +44,14 @@ public class VemployeeServiceImpl implements VemployeeService {
         this.wmGenericDao = wmGenericDao;
     }
 
+    @Transactional(value = "AdventureWorks2014TransactionManager")
+    @Override
+	public Vemployee create(Vemployee vemployee) {
+        LOGGER.debug("Creating a new Vemployee with information: {}", vemployee);
+        Vemployee vemployeeCreated = this.wmGenericDao.create(vemployee);
+        return vemployeeCreated;
+    }
+
 	@Transactional(readOnly = true, value = "AdventureWorks2014TransactionManager")
 	@Override
 	public Vemployee getById(VemployeeId vemployeeId) throws EntityNotFoundException {
@@ -63,6 +71,48 @@ public class VemployeeServiceImpl implements VemployeeService {
         return this.wmGenericDao.findById(vemployeeId);
     }
 
+
+	@Transactional(rollbackFor = EntityNotFoundException.class, value = "AdventureWorks2014TransactionManager")
+	@Override
+	public Vemployee update(Vemployee vemployee) throws EntityNotFoundException {
+        LOGGER.debug("Updating Vemployee with information: {}", vemployee);
+        this.wmGenericDao.update(vemployee);
+
+        VemployeeId vemployeeId = new VemployeeId();
+        vemployeeId.setBusinessEntityId(vemployee.getBusinessEntityId());
+        vemployeeId.setTitle(vemployee.getTitle());
+        vemployeeId.setFirstName(vemployee.getFirstName());
+        vemployeeId.setMiddleName(vemployee.getMiddleName());
+        vemployeeId.setLastName(vemployee.getLastName());
+        vemployeeId.setSuffix(vemployee.getSuffix());
+        vemployeeId.setJobTitle(vemployee.getJobTitle());
+        vemployeeId.setPhoneNumber(vemployee.getPhoneNumber());
+        vemployeeId.setPhoneNumberType(vemployee.getPhoneNumberType());
+        vemployeeId.setEmailAddress(vemployee.getEmailAddress());
+        vemployeeId.setEmailPromotion(vemployee.getEmailPromotion());
+        vemployeeId.setAddressLine1(vemployee.getAddressLine1());
+        vemployeeId.setAddressLine2(vemployee.getAddressLine2());
+        vemployeeId.setCity(vemployee.getCity());
+        vemployeeId.setStateProvinceName(vemployee.getStateProvinceName());
+        vemployeeId.setPostalCode(vemployee.getPostalCode());
+        vemployeeId.setCountryRegionName(vemployee.getCountryRegionName());
+        vemployeeId.setAdditionalContactInfo(vemployee.getAdditionalContactInfo());
+
+        return this.wmGenericDao.findById(vemployeeId);
+    }
+
+    @Transactional(value = "AdventureWorks2014TransactionManager")
+	@Override
+	public Vemployee delete(VemployeeId vemployeeId) throws EntityNotFoundException {
+        LOGGER.debug("Deleting Vemployee with id: {}", vemployeeId);
+        Vemployee deleted = this.wmGenericDao.findById(vemployeeId);
+        if (deleted == null) {
+            LOGGER.debug("No Vemployee found with id: {}", vemployeeId);
+            throw new EntityNotFoundException(String.valueOf(vemployeeId));
+        }
+        this.wmGenericDao.delete(deleted);
+        return deleted;
+    }
 
 	@Transactional(readOnly = true, value = "AdventureWorks2014TransactionManager")
 	@Override

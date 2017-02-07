@@ -45,10 +45,20 @@ public class VemployeeDepartmentHistoryController {
     @Qualifier("AdventureWorks2014.VemployeeDepartmentHistoryService")
     private VemployeeDepartmentHistoryService vemployeeDepartmentHistoryService;
 
+    @ApiOperation(value = "Creates a new VemployeeDepartmentHistory instance.")
+    @RequestMapping(method = RequestMethod.POST)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public VemployeeDepartmentHistory createVemployeeDepartmentHistory(@RequestBody VemployeeDepartmentHistory vemployeeDepartmentHistory) {
+        LOGGER.debug("Create VemployeeDepartmentHistory with information: {}", vemployeeDepartmentHistory);
+        vemployeeDepartmentHistory = vemployeeDepartmentHistoryService.create(vemployeeDepartmentHistory);
+        LOGGER.debug("Created VemployeeDepartmentHistory with information: {}", vemployeeDepartmentHistory);
+        return vemployeeDepartmentHistory;
+    }
+
     @ApiOperation(value = "Returns the VemployeeDepartmentHistory instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public VemployeeDepartmentHistory getVemployeeDepartmentHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("shift") String shift, @RequestParam("department") String department, @RequestParam("groupName") String groupName, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate) throws EntityNotFoundException {
+    public VemployeeDepartmentHistory getVemployeeDepartmentHistory(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "title", required = true) String title, @RequestParam(value = "firstName", required = true) String firstName, @RequestParam(value = "middleName", required = true) String middleName, @RequestParam(value = "lastName", required = true) String lastName, @RequestParam(value = "suffix", required = true) String suffix, @RequestParam(value = "shift", required = true) String shift, @RequestParam(value = "department", required = true) String department, @RequestParam(value = "groupName", required = true) String groupName, @RequestParam(value = "startDate", required = true) Date startDate, @RequestParam(value = "endDate", required = true) Date endDate) throws EntityNotFoundException {
         VemployeeDepartmentHistoryId vemployeedepartmenthistoryId = new VemployeeDepartmentHistoryId();
         vemployeedepartmenthistoryId.setBusinessEntityId(businessEntityId);
         vemployeedepartmenthistoryId.setTitle(title);
@@ -67,6 +77,46 @@ public class VemployeeDepartmentHistoryController {
         return vemployeeDepartmentHistory;
     }
 
+    @ApiOperation(value = "Updates the VemployeeDepartmentHistory instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.PUT)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public VemployeeDepartmentHistory editVemployeeDepartmentHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("shift") String shift, @RequestParam("department") String department, @RequestParam("groupName") String groupName, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate, @RequestBody VemployeeDepartmentHistory vemployeeDepartmentHistory) throws EntityNotFoundException {
+        vemployeeDepartmentHistory.setBusinessEntityId(businessEntityId);
+        vemployeeDepartmentHistory.setTitle(title);
+        vemployeeDepartmentHistory.setFirstName(firstName);
+        vemployeeDepartmentHistory.setMiddleName(middleName);
+        vemployeeDepartmentHistory.setLastName(lastName);
+        vemployeeDepartmentHistory.setSuffix(suffix);
+        vemployeeDepartmentHistory.setShift(shift);
+        vemployeeDepartmentHistory.setDepartment(department);
+        vemployeeDepartmentHistory.setGroupName(groupName);
+        vemployeeDepartmentHistory.setStartDate(startDate);
+        vemployeeDepartmentHistory.setEndDate(endDate);
+        LOGGER.debug("VemployeeDepartmentHistory details with id is updated with: {}", vemployeeDepartmentHistory);
+        return vemployeeDepartmentHistoryService.update(vemployeeDepartmentHistory);
+    }
+
+    @ApiOperation(value = "Deletes the VemployeeDepartmentHistory instance associated with the given composite-id.")
+    @RequestMapping(value = "/composite-id", method = RequestMethod.DELETE)
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public boolean deleteVemployeeDepartmentHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("title") String title, @RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName, @RequestParam("lastName") String lastName, @RequestParam("suffix") String suffix, @RequestParam("shift") String shift, @RequestParam("department") String department, @RequestParam("groupName") String groupName, @RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate) throws EntityNotFoundException {
+        VemployeeDepartmentHistoryId vemployeedepartmenthistoryId = new VemployeeDepartmentHistoryId();
+        vemployeedepartmenthistoryId.setBusinessEntityId(businessEntityId);
+        vemployeedepartmenthistoryId.setTitle(title);
+        vemployeedepartmenthistoryId.setFirstName(firstName);
+        vemployeedepartmenthistoryId.setMiddleName(middleName);
+        vemployeedepartmenthistoryId.setLastName(lastName);
+        vemployeedepartmenthistoryId.setSuffix(suffix);
+        vemployeedepartmenthistoryId.setShift(shift);
+        vemployeedepartmenthistoryId.setDepartment(department);
+        vemployeedepartmenthistoryId.setGroupName(groupName);
+        vemployeedepartmenthistoryId.setStartDate(startDate);
+        vemployeedepartmenthistoryId.setEndDate(endDate);
+        LOGGER.debug("Deleting VemployeeDepartmentHistory with id: {}", vemployeedepartmenthistoryId);
+        VemployeeDepartmentHistory vemployeeDepartmentHistory = vemployeeDepartmentHistoryService.delete(vemployeedepartmenthistoryId);
+        return vemployeeDepartmentHistory != null;
+    }
+
     /**
      * @deprecated Use {@link #findVemployeeDepartmentHistories(String, Pageable)} instead.
      */
@@ -83,6 +133,14 @@ public class VemployeeDepartmentHistoryController {
     @RequestMapping(method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<VemployeeDepartmentHistory> findVemployeeDepartmentHistories(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering VemployeeDepartmentHistories list");
+        return vemployeeDepartmentHistoryService.findAll(query, pageable);
+    }
+
+    @ApiOperation(value = "Returns the paginated list of VemployeeDepartmentHistory instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<VemployeeDepartmentHistory> filterVemployeeDepartmentHistories(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
         LOGGER.debug("Rendering VemployeeDepartmentHistories list");
         return vemployeeDepartmentHistoryService.findAll(query, pageable);
     }

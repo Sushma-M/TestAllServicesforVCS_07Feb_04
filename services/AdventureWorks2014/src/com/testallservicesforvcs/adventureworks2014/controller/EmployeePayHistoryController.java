@@ -58,7 +58,7 @@ public class EmployeePayHistoryController {
     @ApiOperation(value = "Returns the EmployeePayHistory instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public EmployeePayHistory getEmployeePayHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("rateChangeDate") LocalDateTime rateChangeDate) throws EntityNotFoundException {
+    public EmployeePayHistory getEmployeePayHistory(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "rateChangeDate", required = true) LocalDateTime rateChangeDate) throws EntityNotFoundException {
         EmployeePayHistoryId employeepayhistoryId = new EmployeePayHistoryId();
         employeepayhistoryId.setBusinessEntityId(businessEntityId);
         employeepayhistoryId.setRateChangeDate(rateChangeDate);
@@ -71,7 +71,7 @@ public class EmployeePayHistoryController {
     @ApiOperation(value = "Updates the EmployeePayHistory instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.PUT)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public EmployeePayHistory editEmployeePayHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("rateChangeDate") LocalDateTime rateChangeDate, @RequestBody EmployeePayHistory employeePayHistory) throws EntityNotFoundException {
+    public EmployeePayHistory editEmployeePayHistory(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "rateChangeDate", required = true) LocalDateTime rateChangeDate, @RequestBody EmployeePayHistory employeePayHistory) throws EntityNotFoundException {
         employeePayHistory.setBusinessEntityId(businessEntityId);
         employeePayHistory.setRateChangeDate(rateChangeDate);
         LOGGER.debug("EmployeePayHistory details with id is updated with: {}", employeePayHistory);
@@ -81,7 +81,7 @@ public class EmployeePayHistoryController {
     @ApiOperation(value = "Deletes the EmployeePayHistory instance associated with the given composite-id.")
     @RequestMapping(value = "/composite-id", method = RequestMethod.DELETE)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
-    public boolean deleteEmployeePayHistory(@RequestParam("businessEntityId") Integer businessEntityId, @RequestParam("rateChangeDate") LocalDateTime rateChangeDate) throws EntityNotFoundException {
+    public boolean deleteEmployeePayHistory(@RequestParam(value = "businessEntityId", required = true) Integer businessEntityId, @RequestParam(value = "rateChangeDate", required = true) LocalDateTime rateChangeDate) throws EntityNotFoundException {
         EmployeePayHistoryId employeepayhistoryId = new EmployeePayHistoryId();
         employeepayhistoryId.setBusinessEntityId(businessEntityId);
         employeepayhistoryId.setRateChangeDate(rateChangeDate);
@@ -106,6 +106,14 @@ public class EmployeePayHistoryController {
     @RequestMapping(method = RequestMethod.GET)
     @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
     public Page<EmployeePayHistory> findEmployeePayHistories(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
+        LOGGER.debug("Rendering EmployeePayHistories list");
+        return employeePayHistoryService.findAll(query, pageable);
+    }
+
+    @ApiOperation(value = "Returns the paginated list of EmployeePayHistory instances matching the optional query (q) request param. This API should be used only if the query string is too big to fit in GET request with request param. The request has to made in application/x-www-form-urlencoded format.")
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    @WMAccessVisibility(value = AccessSpecifier.APP_ONLY)
+    public Page<EmployeePayHistory> filterEmployeePayHistories(@ApiParam("conditions to filter the results") @RequestParam(value = "q", required = false) String query, Pageable pageable) {
         LOGGER.debug("Rendering EmployeePayHistories list");
         return employeePayHistoryService.findAll(query, pageable);
     }

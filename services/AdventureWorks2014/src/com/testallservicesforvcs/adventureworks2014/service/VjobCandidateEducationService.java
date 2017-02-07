@@ -22,6 +22,16 @@ import com.testallservicesforvcs.adventureworks2014.VjobCandidateEducationId;
  */
 public interface VjobCandidateEducationService {
 
+    /**
+     * Creates a new VjobCandidateEducation. It does cascade insert for all the children in a single transaction.
+     *
+     * This method overrides the input field values using Server side or database managed properties defined on VjobCandidateEducation if any.
+     *
+     * @param vjobCandidateEducation Details of the VjobCandidateEducation to be created; value cannot be null.
+     * @return The newly created VjobCandidateEducation.
+     */
+	VjobCandidateEducation create(VjobCandidateEducation vjobCandidateEducation);
+
 
 	/**
 	 * Returns VjobCandidateEducation by given id if exists.
@@ -40,6 +50,26 @@ public interface VjobCandidateEducationService {
 	 */
 	VjobCandidateEducation findById(VjobCandidateEducationId vjobcandidateeducationId);
 
+
+	/**
+	 * Updates the details of an existing VjobCandidateEducation. It replaces all fields of the existing VjobCandidateEducation with the given vjobCandidateEducation.
+	 *
+     * This method overrides the input field values using Server side or database managed properties defined on VjobCandidateEducation if any.
+     *
+	 * @param vjobCandidateEducation The details of the VjobCandidateEducation to be updated; value cannot be null.
+	 * @return The updated VjobCandidateEducation.
+	 * @throws EntityNotFoundException if no VjobCandidateEducation is found with given input.
+	 */
+	VjobCandidateEducation update(VjobCandidateEducation vjobCandidateEducation) throws EntityNotFoundException;
+
+    /**
+	 * Deletes an existing VjobCandidateEducation with the given id.
+	 *
+	 * @param vjobcandidateeducationId The id of the VjobCandidateEducation to be deleted; value cannot be null.
+	 * @return The deleted VjobCandidateEducation.
+	 * @throws EntityNotFoundException if no VjobCandidateEducation found with the given id.
+	 */
+	VjobCandidateEducation delete(VjobCandidateEducationId vjobcandidateeducationId) throws EntityNotFoundException;
 
 	/**
 	 * Find all VjobCandidateEducations matching the given QueryFilter(s).
