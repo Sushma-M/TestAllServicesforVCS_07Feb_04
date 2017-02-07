@@ -1,0 +1,40 @@
+{
+  "name" : "AdventureWorks2014",
+  "description" : "Procedure for AdventureWorks2014",
+  "procedures" : [ {
+    "name" : "GetdeptInfo",
+    "procedure" : "Exec HumanResources.getDeparmentInfoOut :deptid,:Name",
+    "comment" : "d",
+    "description" : null,
+    "outputType" : null,
+    "returnsSingleResult" : false,
+    "procedureParams" : [ {
+      "paramName" : "deptid",
+      "procedureParamType" : "IN",
+      "valueType" : "java.lang.Integer",
+      "testValue" : "2",
+      "systemParamName" : null,
+      "systemParam" : false,
+      "list" : false
+    }, {
+      "paramName" : "Name",
+      "procedureParamType" : "OUT",
+      "valueType" : "java.lang.String",
+      "testValue" : "",
+      "systemParamName" : null,
+      "systemParam" : false,
+      "list" : false
+    } ],
+    "returnTypeMetadata" : [ {
+      "element" : [ {
+        "name" : "Name",
+        "subType" : null,
+        "typeRef" : "java.lang.String",
+        "isList" : false,
+        "allowNull" : null
+      } ],
+      "javaType" : "AdventureWorks2014GetdeptInfortnType",
+      "name" : "AdventureWorks2014GetdeptInfortnType"
+    } ]
+  } ]
+}
